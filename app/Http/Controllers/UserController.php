@@ -21,10 +21,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $id)
     {
-        //
-        return view('users.create');
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->save();
+        return response()->json($user);
     }
     /**
      * Store a newly created resource in storage.
@@ -35,12 +39,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        //  return $request;
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
+       
         $user->save();
-        return redirect()->route('users.index');
+        // return redirect()->route('users.index');
+        // return response()->json($users);
+        return response()->json($user);
     }
     /**
      * Display the specified resource.
@@ -50,10 +58,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
         $user = User::find($id);
-        // return response()->json("ok");
-        return view('users.show', ['user' => $user]);
+        return response()->json([
+            'user' => $user
+        ]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -65,7 +73,7 @@ class UserController extends Controller
     {
         //
         $user = User::find($id);
-        return view('users.edit', ['user' => $user]);
+        return response()->json($user);
     }
     /**
      * Update the specified resource in storage.
@@ -76,11 +84,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         return $request;
         $user = User::find($id);
         $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
         $user->save();
-        return redirect()->route('users.index');
+        return response()->json($user);
+        // $name = $request->name;
+        // $email = $request->email;
+        // $password = $request->password;
+        // $user = User::find($id);
+        // $user->update([
+        //     'name' => $name,
+        //     'email' => $email,
+        //     'password' => bcrypt($password),
+        // ]);
+        // return response()->json([
+        //     'status' => '200',
+        //     'message' => 'updated',
+        //     'data' => ['user' => $user],
+        // ]);
     }
     /**
      * Remove the specified resource from storage.
